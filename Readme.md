@@ -8,3 +8,11 @@ npm install mongodb mongoose
 npm install jsonwebtoken bcryptjs
 
 npm i @arcjet/node 
+
+npm install @upstash/workflow
+
+npm install dayjs
+
+npx @upstash/qstash-cli dev
+
+npm install nodemailer
