@@ -5,3 +5,5 @@ npx eslint --init
 npm install dotenv
 
 npm install mongodb mongoose
+npm install jsonwebtoken bcryptjs
+
