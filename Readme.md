@@ -4,3 +4,4 @@ npm install -g eslint
 npx eslint --init
 npm install dotenv
 
+npm install mongodb mongoose
