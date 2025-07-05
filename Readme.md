@@ -7,3 +7,4 @@ npm install dotenv
 npm install mongodb mongoose
 npm install jsonwebtoken bcryptjs
 
+npm i @arcjet/node 
