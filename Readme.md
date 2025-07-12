@@ -93,7 +93,7 @@ You can use tools like:
 
 Example:
 ```bash
-http POST :5000/api/v1/auth/signup name="Rupak" email="test@example.com" password="secret"
+http POST :5500/api/v1/auth/signup name="Rupak" email="test@example.com" password="secret"
 ````
 
 ---
@@ -103,10 +103,10 @@ http POST :5000/api/v1/auth/signup name="Rupak" email="test@example.com" passwor
 Create a `.env` file with the following:
 
 ```env
-PORT=5000
+PORT=5500
 MONGO_URI=your_mongodb_uri
 JWT_SECRET=your_secret_key
-SERVER_URL=http://localhost:5000
+SERVER_URL=http://localhost:5500
 EMAIL_USER=your_email@example.com
 EMAIL_PASS=your_email_password
 ```
@@ -133,23 +133,12 @@ src/
 ├── middlewares/
 ├── utils/
 ├── config/
-└── index.js
+└── app.js
 ```
-
 ---
-
-## 📝 License
-
-MIT
-
----
-
 > Developed by Rupak Das
-> 📧 \[LinkedIn/GitHub or contact info here, optional]
 
 ```
-
 ---
 
-Let me know if you'd like to add deployment instructions (e.g., for Render, Railway, or Docker) or badges (build, license, etc.) to the top.
 ```
