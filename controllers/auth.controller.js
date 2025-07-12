@@ -8,6 +8,7 @@ import TokenBlacklist from "../models/tokenBlacklist.model.js";
 
 // What is a req body --> It is an object containing data from the client (POST request)
 
+// 1
 export const SignUp = async (req, res, next) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -52,6 +53,7 @@ export const SignUp = async (req, res, next) => {
   }
 };
 
+// 2
 export const SignIn = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -87,6 +89,7 @@ export const SignIn = async (req, res, next) => {
   }
 };
 
+// 3
 export const SignOut = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
