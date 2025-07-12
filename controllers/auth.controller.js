@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 
 import User from "../models/user.model.js";
 import { JWT_EXPIRES_IN, JWT_SECRET } from "../config/env.js";
+import TokenBlacklist from "../models/tokenBlacklist.model.js";
 
 // What is a req body --> It is an object containing data from the client (POST request)
 
@@ -27,7 +28,10 @@ export const SignUp = async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUsers = await User.create([ { name, email, password: hashedPassword}], { session });
+    const newUsers = await User.create(
+      [{ name, email, password: hashedPassword, role: 'user'}], 
+      { session }
+    );
     const token = jwt.sign({ userId: newUsers[0]._id}, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
     await session.commitTransaction();
@@ -83,4 +87,26 @@ export const SignIn = async (req, res, next) => {
   }
 };
 
-export const SignOut = (req, res, next) => {};
+export const SignOut = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(400).json({ message: "No token provided" });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    const decoded = jwt.decode(token);
+    const expiresAt = new Date(decoded.exp * 1000); // JWT expiration in ms
+
+    await TokenBlacklist.create({ token, expiresAt });
+
+    res.status(200).json({
+      success: true,
+      message: 'Successfully signed out. Token is now invalidated.'
+    });
+  } catch (error) {
+    next(error);
+  }
+};

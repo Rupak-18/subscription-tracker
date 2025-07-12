@@ -1,0 +1,22 @@
+// SUBSCRIPTION
+{
+"name": "JIO TV"
+"price": "449",
+"currency": "INR",
+"frequency": "monthly",
+"category": "sports",
+"paymentMethod": "UPI"
+}
+
+// SIGN-UP
+{
+"name": "RUPAK DAS",
+"email": "dasrupak@gmail.com",
+"password": "123456"
+}
+
+// SIGN-IN
+{
+"email": "dasrupak@gmail.com",
+"password": "123456"
+}
