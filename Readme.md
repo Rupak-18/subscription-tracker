@@ -1,7 +1,3 @@
-Here's a clear and well-structured `README.md` for your **Subscription Tracker API** project, tailored to the current structure and features you've implemented:
-
----
-
 ```markdown
 # 📦 Subscription Tracker API
 
