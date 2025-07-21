@@ -13,8 +13,8 @@ import requireAdmin from '../middlewares/admin.middleware.js';
 
 const userRouter = Router();
 
-// 1
-userRouter.get('/', getUsers);
+// 1 (Admin only route)
+userRouter.get('/', authorize, requireAdmin, getUsers);
 
 // 2
 userRouter.get('/:id', authorize, getUser);

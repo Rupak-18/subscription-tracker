@@ -1,144 +1,155 @@
-```markdown
-# 📦 Subscription Tracker API
-
-A RESTful API for tracking user subscriptions, managing renewals, and sending email reminders — built with **Node.js**, **Express**, and **MongoDB**.
 
 ---
+
+```md
+# 📦 Subscription Tracker API
+
+A RESTful API built with Node.js, Express, and MongoDB for managing user subscriptions and sending automated renewal reminders via email.
 
 ## 🚀 Features
 
-- User registration & login with JWT-based authentication
-- Role-based access (User / Admin)
-- Admin-only user creation
-- Subscription CRUD operations
-- Auto-calculation of renewal date based on frequency
-- Email reminders before renewal (via Upstash Workflows)
-- View upcoming renewals within 30 days
-- Token blacklist for logout/session invalidation
+- 🔐 JWT-based user authentication
+- 👤 Role-based access control (`user`, `admin`)
+- 📅 Subscription tracking with renewal dates
+- 📬 Email reminders (1, 2, 5, 7 days before renewal)
+- 🛠️ Admin-only user management
+- ⚡ Workflow automation via Upstash
+- 🧠 Arcjet integration for security
 
 ---
 
-## 🛠️ Tech Stack
+## 🧱 Tech Stack
 
-- **Node.js** + **Express**  
-- **MongoDB** + **Mongoose**  
-- **JWT** (Auth)  
-- **Upstash Workflows** (Scheduled reminders)  
-- **nodemailer** (Email notifications)  
-- **dotenv**, **http-errors**, **dayjs**
-
----
-
-## 🧑‍💻 API Endpoints
-
-### Auth
-```
-
-POST   /api/v1/auth/signup       # User signup
-POST   /api/v1/auth/login        # User/Admin login
-POST   /api/v1/auth/logout       # Invalidate token
-POST   /api/v1/auth/forgot       # Request password reset
-POST   /api/v1/auth/reset/\:token # Reset password
-
-```
-
-### Users
-```
-
-GET    /api/v1/users/\:id         # Get user info (auth required)
-PUT    /api/v1/users/\:id         # Update own username/email
-DELETE /api/v1/users/\:id         # Delete own account (or admin)
-POST   /api/v1/users/            # Admin creates new user
-
-```
-
-### Subscriptions
-```
-
-POST   /api/v1/subscriptions/                # Create subscription (auth required)
-GET    /api/v1/subscriptions/user/\:id        # Get all subscriptions for a user
-GET    /api/v1/subscriptions/\:id             # Get single subscription (auth required)
-PUT    /api/v1/subscriptions/\:id             # Update subscription (auth required)
-DELETE /api/v1/subscriptions/\:id             # Delete subscription (auth required)
-POST   /api/v1/subscriptions/\:id/cancel      # Cancel subscription
-GET    /api/v1/subscriptions/upcoming-renewal# Get user's upcoming renewals in 30 days
-
-````
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB (via Mongoose)
+- **Authentication**: JWT + Token Blacklisting
+- **Emails**: Nodemailer
+- **Workflows**: Upstash Workflows
+- **Security**: Arcjet Middleware
 
 ---
 
-## 🔒 Authentication & Authorization
-
-- Users receive a **JWT token** upon login.
-- Protected routes require the `Authorization: Bearer <token>` header.
-- Admin-only routes are guarded by `requireAdmin` middleware.
-
----
-
-## 📧 Email Reminders (Upstash Workflow)
-
-The system automatically schedules reminders before subscription renewal:
-- 7, 5, 2, and 1 day(s) before renewal
-- Only if subscription is still `active`
-
----
-
-## 🧪 Testing
-
-You can use tools like:
-
-- **HTTPie**
-- **Postman**
-- **cURL**
-
-Example:
-```bash
-http POST :5500/api/v1/auth/signup name="Rupak" email="test@example.com" password="secret"
-````
-
----
-
-## ⚙️ Environment Variables
-
-Create a `.env` file with the following:
-
-```env
-PORT=5500
-MONGO_URI=your_mongodb_uri
-JWT_SECRET=your_secret_key
-SERVER_URL=http://localhost:5500
-EMAIL_USER=your_email@example.com
-EMAIL_PASS=your_email_password
-```
-
----
-
-## 🧹 Scripts
-
-```bash
-npm install      # Install dependencies
-npm run dev      # Start dev server with nodemon
-npm run start    # Start in production mode
-```
-
----
-
-## 📁 Project Structure
+## 📂 Project Structure
 
 ```
-src/
-├── controllers/
-├── models/
-├── routes/
-├── middlewares/
-├── utils/
+
+📦 subscription-tracker-api
+├── app.js
 ├── config/
-└── app.js
-```
----
-> Developed by Rupak Das
+│   ├── arcjet.js
+│   ├── env.js
+│   ├── nodemailer.js
+│   └── upstash.js
+├── controllers/
+│   ├── auth.controller.js
+│   ├── subscription.controller.js
+│   ├── user.controller.js
+│   └── workflow\.controller.js
+├── database/
+│   └── mongodb.js
+├── middlewares/
+│   ├── admin.middleware.js
+│   ├── arcjet.middleware.js
+│   ├── auth.middleware.js
+│   └── error.middleware.js
+├── models/
+│   ├── subscription.model.js
+│   ├── tokenBlacklist.model.js
+│   └── user.model.js
+├── routes/
+│   ├── auth.routes.js
+│   ├── subscription.routes.js
+│   ├── user.routes.js
+│   └── workflow\.routes.js
+├── utils/
+│   ├── email-template.js
+│   └── send-email.js
+└── .env
 
-```
+````
+
 ---
+
+## 📌 API Endpoints
+
+### 🧑 Auth
+- `POST /api/v1/auth/sign-up` – Register user
+- `POST /api/v1/auth/sign-in` – Login and get token
+- `POST /api/v1/auth/sign-out` – Invalidate token
+
+### 👤 Users
+- `GET /api/v1/users/` – (admin) List users
+- `GET /api/v1/users/:id` – Get user by ID
+- `POST /api/v1/users/` – (admin) Create user
+- `PUT /api/v1/users/:id` – Update user
+- `DELETE /api/v1/users/:id` – Delete user
+
+### 💳 Subscriptions
+- `GET /api/v1/subscriptions/` – All subscriptions
+- `GET /api/v1/subscriptions/user/:id` – By user
+- `GET /api/v1/subscriptions/upcoming-renewal` – Nearing renewal
+- `POST /api/v1/subscriptions/` – Create subscription
+- `PUT /api/v1/subscriptions/:id` – Update subscription
+- `POST /api/v1/subscriptions/:id/cancel` – Cancel subscription
+- `DELETE /api/v1/subscriptions/:id` – Delete subscription
+
+### 🔁 Workflow
+- `POST /api/v1/workflows/subscription/reminder` – Start reminder schedule
+
+---
+
+## 🛠️ Setup Instructions
+
+1. **Clone & Install**
+   ```bash
+   git clone https://github.com/your-username/subscription-tracker-api.git
+   cd subscription-tracker-api
+   npm install
+````
+
+2. **Configure `.env`**
+
+   ```env
+   PORT=5000
+   MONGODB_URI=your_mongodb_uri
+   JWT_SECRET=your_jwt_secret
+   SMTP_HOST=smtp.example.com
+   SMTP_PORT=587
+   SMTP_USER=your_email_user
+   SMTP_PASS=your_email_password
+   ```
+
+3. **Start the server**
+
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 📚 Documentation
+
+Explore the full API reference and examples:
+👉 [https://documenter.getpostman.com/view/46910907/2sB34kEyvy#0a79acd6-6af1-4c46-9c35-53b43edeed97]
+
+---
+
+## 🧠 Notes
+
+* `renewalDate` is auto-generated based on `frequency` if not provided.
+* Workflows check and send reminders 7, 5, 2, and 1 day(s) before expiration.
+* Arcjet middleware provides real-time request security.
+
+---
+
+## 🧑‍💻 Author
+
+Developed by **Rupak Das**
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
 
 ```
